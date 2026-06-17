@@ -1,0 +1,34 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+// Get a free hosted Postgres database in seconds: `npx create-db`
+
+generator client {
+  provider = "prisma-client-js"
+  output   = "../src/generated/prisma"
+}
+
+datasource db {
+  provider = "sqlite"
+}
+
+//working model of a product a user could buy
+model Product {
+  id               Int       @id @default(autoincrement()) @map("product_id")
+  productType      String 
+  preferredBrand   String
+  cost             Decimal?  @map("product_cost")
+  outOfStock       Boolean  //If the user has this item in stock
+  productUrl       String  //Walmart link
+  recipes        Recipe[]
+}
+
+//working model of a recipe that contains products
+model Recipe {
+  id               Int       @id @default(autoincrement()) @map("product_id")
+  recipeName       String
+  description      String
+  cookTimeHours    Decimal?
+  whitelist        Boolean   @default(true) //if the user has disliked this recipe this will be false for x time
+  ingredients      Product[] 
+}
