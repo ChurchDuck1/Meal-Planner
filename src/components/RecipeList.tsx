@@ -1,6 +1,15 @@
 "use client";
 
-export default function RecipeList({ recipes }) {
+type Recipe = {
+  id: string | number;
+  recipeName: string;
+};
+
+type RecipeListProps = {
+  recipes: Recipe[];
+};
+
+export default function RecipeList({ recipes }: RecipeListProps) {
   return (
     <ul>
       {recipes.map((recipe) => (

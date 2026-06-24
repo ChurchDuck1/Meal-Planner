@@ -3,6 +3,8 @@ import type { Metadata } from "next";
 import { Geist, Geist_Mono, Figtree } from "next/font/google";
 import "./globals.css";
 import { cn } from "@/lib/utils";
+import { SidebarProvider, SidebarTrigger } from "@/components/ui/sidebar"
+import { AppSidebar } from "@/components/app-sidebar"
 
 const figtree = Figtree({subsets:['latin'],variable:'--font-sans'});
 
@@ -38,7 +40,12 @@ export default function RootLayout({
             enableSystem
             disableTransitionOnChange
           >
-            {children}
+            <SidebarProvider>
+              <AppSidebar />
+              <main>
+                {children}
+              </main>
+            </SidebarProvider>
           </ThemeProvider>
       </body>
     </html>

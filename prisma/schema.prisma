@@ -12,23 +12,39 @@ datasource db {
   provider = "sqlite"
 }
 
+//defines how much of an ingredient is needed in a recipe
+model RecipeIngredient {
+  id               Int     @id @default(autoincrement())
+  quantity         Decimal
+  unit             String  // "cups", "tbsp", "whole", "oz", etc.
+  recipe           Recipe  @relation(fields: [recipeId], references: [id])
+  recipeId         Int
+  product          Product @relation(fields: [productId], references: [id])
+  productId        Int
+
+  @@unique([recipeId, productId]) // prevents duplicate ingredients per recipe
+}
+
 //working model of a product a user could buy
 model Product {
   id               Int       @id @default(autoincrement()) @map("product_id")
   productType      String 
   preferredBrand   String
   cost             Decimal?  @map("product_cost")
-  outOfStock       Boolean  //If the user has this item in stock
-  productUrl       String  //Walmart link
-  recipes        Recipe[]
+  productUrl       String   //Walmart link
+  productImage     String?  //link to an image for the product
+  recipes          RecipeIngredient[]
 }
 
 //working model of a recipe that contains products
 model Recipe {
-  id               Int       @id @default(autoincrement()) @map("product_id")
+  id               Int       @id @default(autoincrement()) @map("recipe_id")
   recipeName       String
   description      String
   cookTimeHours    Decimal?
+  instructions     String
   whitelist        Boolean   @default(true) //if the user has disliked this recipe this will be false for x time
-  ingredients      Product[] 
-}
+  ingredients      RecipeIngredient[] 
+  lastUsedWeeks    Int     //how many weeks ago it was last used
+  favorite         Boolean
+} 
